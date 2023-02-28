@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+group 'com.tarasov.tests'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation (
+            'com.codeborne:selenide:6.11.0',
+            'org.junit.jupiter:junit-jupiter:5.9.2',
+            "org.slf4j:slf4j-simple:2.0.6",
+            'org.assertj:assertj-core:3.24.2',
+            'com.github.javafaker:javafaker:1.0.2',
+            'io.rest-assured:rest-assured:5.3.0'
+    )
+}
+
+test {
+    useJUnitPlatform()
+}
