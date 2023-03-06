@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id "io.freefair.lombok" version "6.5.1"
+    id "io.qameta.allure" version "2.11.2"
 }
 
 group 'com.tarasov.tests'
@@ -9,17 +11,37 @@ repositories {
     mavenCentral()
 }
 
+def allureVersion = "2.21.0",
+        slf4jVersion = "1.7.32"
+
 dependencies {
-    testImplementation (
-            'com.codeborne:selenide:6.11.0',
-            'org.junit.jupiter:junit-jupiter:5.9.2',
-            "org.slf4j:slf4j-simple:2.0.6",
-            'org.assertj:assertj-core:3.24.2',
-            'com.github.javafaker:javafaker:1.0.2',
-            'io.rest-assured:rest-assured:5.3.0'
+    testImplementation(
+            "io.rest-assured:rest-assured:5.3.0",
+            "io.qameta.allure:allure-rest-assured:$allureVersion",
+            "com.fasterxml.jackson.core:jackson-databind:2.14.2",
+            "org.assertj:assertj-core:3.24.2",
+            "org.junit.jupiter:junit-jupiter:5.9.2",
+            "org.slf4j:slf4j-simple:$slf4jVersion"
     )
 }
 
 test {
     useJUnitPlatform()
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+    systemProperties(System.getProperties())
+    testLogging {
+        lifecycle {
+            events "started", "skipped", "failed", "standard_error", "standard_out"
+            exceptionFormat "short"
+        }
+    }
+}
+
+task api_task(type: Test) {
+    useJUnitPlatform {
+        includeTags("api_test")
+    }
 }
